@@ -135,13 +135,5 @@ catch
 }
 ```
 
-## 💡 Extension Ideas
-
-- Add async methods (e.g. ExecuteNonQueryAsync)
-- Bulk operations support
-- Output parameters for stored procedures
-- Retry policies with exponential backoff
-- Log filtering by level
-
 ## ❓ Need Help?
 Open an issue or reach out if you’d like to contribute or request features!
