@@ -38,7 +38,11 @@ namespace SharpDBCore.Core
             if (_connection?.State != ConnectionState.Open)
                 _connection?.Open();
         }
-
+        private async Task EnsureConnectionOpenAsync(CancellationToken cancellationToken = default)
+        {
+            if (_connection?.State != ConnectionState.Open)
+                await _connection!.OpenAsync(cancellationToken);
+        }
         public void BeginTransaction()
         {
             try
@@ -52,7 +56,19 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await EnsureConnectionOpenAsync(cancellationToken);
+                _transaction = (SqlTransaction?)await _connection!.BeginTransactionAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error starting async transaction", ex);
+                throw;
+            }
+        }
         public void CommitTransaction()
         {
             try
@@ -72,7 +88,25 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
+        public async Task CommitTransactionAsync()
+        {
+            try
+            {
+                if (_transaction == null)
+                    throw new InvalidOperationException("No active transaction to commit.");
 
+                await _transaction.CommitAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null;
+                if (_connection?.State == ConnectionState.Open)
+                    await _connection.CloseAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error committing async transaction", ex);
+                throw;
+            }
+        }
         public void RollbackTransaction()
         {
             try
@@ -92,7 +126,25 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-
+        public async Task RollbackTransactionAsync()
+        {
+            try
+            {
+                if (_transaction != null)
+                {
+                    await _transaction.RollbackAsync();
+                    await _transaction.DisposeAsync();
+                    _transaction = null;
+                    if (_connection?.State == ConnectionState.Open)
+                        await _connection.CloseAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error rolling back async transaction", ex);
+                throw;
+            }
+        }
         public int ExecuteNonQuery(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text)
         {
             try
@@ -121,7 +173,33 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
+        public async Task<int> ExecuteNonQueryAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await EnsureConnectionOpenAsync(cancellationToken);
+                await using var cmd = new SqlCommand(commandText, _connection, _transaction)
+                {
+                    CommandType = commandType
+                };
+                if (parameters != null)
+                    SqlParameterHelper.AddParameters(cmd, parameters);
 
+                _logger.LogInfo($"Executing Async NonQuery: {commandText}");
+
+                var result = await cmd.ExecuteNonQueryAsync(cancellationToken);
+
+                if (_transaction == null)
+                    await _connection!.CloseAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error executing Async NonQuery: {commandText}", ex);
+                throw;
+            }
+        }
         public object ExecuteScalar(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text)
         {
             try
@@ -150,7 +228,33 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
+        public async Task<object?> ExecuteScalarAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await EnsureConnectionOpenAsync(cancellationToken);
+                await using var cmd = new SqlCommand(commandText, _connection, _transaction)
+                {
+                    CommandType = commandType
+                };
+                if (parameters != null)
+                    SqlParameterHelper.AddParameters(cmd, parameters);
 
+                _logger.LogInfo($"Executing Async Scalar: {commandText}");
+
+                var result = await cmd.ExecuteScalarAsync(cancellationToken);
+
+                if (_transaction == null)
+                    await _connection!.CloseAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error executing Async Scalar: {commandText}", ex);
+                throw;
+            }
+        }
         public SqlDataReader ExecuteReader(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text)
         {
             try
@@ -172,6 +276,28 @@ namespace SharpDBCore.Core
             catch (Exception ex)
             {
                 _logger.LogError($"Error executing Reader: {commandText}", ex);
+                throw;
+            }
+        }
+        public async Task<SqlDataReader> ExecuteReaderAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await EnsureConnectionOpenAsync(cancellationToken);
+                var cmd = new SqlCommand(commandText, _connection, _transaction)
+                {
+                    CommandType = commandType
+                };
+                if (parameters != null)
+                    SqlParameterHelper.AddParameters(cmd, parameters);
+
+                _logger.LogInfo($"Executing Async Reader: {commandText}");
+
+                return await cmd.ExecuteReaderAsync(_transaction == null ? CommandBehavior.CloseConnection : CommandBehavior.Default, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error executing Async Reader: {commandText}", ex);
                 throw;
             }
         }
@@ -206,7 +332,40 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
+        public async Task<DataTable> ExecuteDataTableAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await EnsureConnectionOpenAsync(cancellationToken);
+                await using var cmd = new SqlCommand(commandText, _connection, _transaction)
+                {
+                    CommandType = commandType
+                };
+                if (parameters != null)
+                    SqlParameterHelper.AddParameters(cmd, parameters);
 
+                _logger.LogInfo($"Executing Async DataTable query: {commandText}");
+
+                var dt = new DataTable();
+
+                // SqlDataAdapter doesn't support async natively, so wrap in Task.Run
+                await Task.Run(() =>
+                {
+                    using var adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }, cancellationToken);
+
+                if (_transaction == null)
+                    await _connection!.CloseAsync();
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error executing Async DataTable: {commandText}", ex);
+                throw;
+            }
+        }
         public void Dispose()
         {
             _transaction?.Dispose();
@@ -217,6 +376,20 @@ namespace SharpDBCore.Core
                     _connection.Close();
 
                 _connection.Dispose();
+                _connection = null;
+            }
+        }
+        public async ValueTask DisposeAsync()
+        {
+            if (_transaction != null)
+                await _transaction.DisposeAsync();
+
+            if (_connection != null)
+            {
+                if (_connection.State != ConnectionState.Closed)
+                    await _connection.CloseAsync();
+
+                await _connection.DisposeAsync();
                 _connection = null;
             }
         }
