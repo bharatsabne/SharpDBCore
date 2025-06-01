@@ -17,10 +17,10 @@ namespace SharpDBCore.Interfaces
         void RollbackTransaction();
 
         // Synchronous query execution
-        int ExecuteNonQuery(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text);
-        object ExecuteScalar(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text);
-        SqlDataReader ExecuteReader(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text);
-        DataTable ExecuteDataTable(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text);
+        int ExecuteNonQuery(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text);
+        object ExecuteScalar(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text);
+        SqlDataReader ExecuteReader(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text);
+        DataTable ExecuteDataTable(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text);
 
         // Asynchronous transaction management
         Task BeginTransactionAsync(CancellationToken cancellationToken = default);
@@ -28,9 +28,9 @@ namespace SharpDBCore.Interfaces
         Task RollbackTransactionAsync();
 
         // Asynchronous query execution
-        Task<int> ExecuteNonQueryAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
-        Task<object?> ExecuteScalarAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
-        Task<SqlDataReader> ExecuteReaderAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
-        Task<DataTable> ExecuteDataTableAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
+        Task<int> ExecuteNonQueryAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
+        Task<object?> ExecuteScalarAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
+        Task<SqlDataReader> ExecuteReaderAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
+        Task<DataTable> ExecuteDataTableAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
     }
 }

@@ -145,7 +145,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public int ExecuteNonQuery(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text)
+        public int ExecuteNonQuery(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public async Task<int> ExecuteNonQueryAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        public async Task<int> ExecuteNonQueryAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -200,7 +200,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public object ExecuteScalar(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text)
+        public object ExecuteScalar(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text)
         {
             try
             {
@@ -228,7 +228,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public async Task<object?> ExecuteScalarAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        public async Task<object?> ExecuteScalarAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -255,7 +255,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public SqlDataReader ExecuteReader(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text)
+        public SqlDataReader ExecuteReader(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text)
         {
             try
             {
@@ -279,7 +279,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public async Task<SqlDataReader> ExecuteReaderAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        public async Task<SqlDataReader> ExecuteReaderAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -301,7 +301,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public DataTable ExecuteDataTable(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text)
+        public DataTable ExecuteDataTable(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text)
         {
             try
             {
@@ -332,7 +332,7 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-        public async Task<DataTable> ExecuteDataTableAsync(string commandText, Dictionary<string, object>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        public async Task<DataTable> ExecuteDataTableAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
             try
             {
