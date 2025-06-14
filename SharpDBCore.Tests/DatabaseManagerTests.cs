@@ -1,10 +1,23 @@
 using SharpDBCore.Core;
 using SharpDBCore.Factories;
+using SharpDBCore.Interfaces;
 using SharpDBCore.Loggers;
 using System.Data.Common;
 
 namespace SharpDBCore.Tests
 {
+    public class MyLogger : NullLogger
+    {
+        public override void LogError(string message, Exception? ex = null)
+        {
+            System.Diagnostics.Debug.WriteLine($"MyLogger.LogError called with message: {message}, Exception: {ex}");
+        }
+
+        public override void LogInfo(string message)
+        {
+            System.Diagnostics.Debug.WriteLine($"MyLogger.LogInfo called with message: {message}");
+        }
+    }
     public class DatabaseManagerTests
     {
         private const string TestConnectionString = "Server=JITUND-0064\\SQLEXPRESS;Database=TestDb;Integrated Security=True;TrustServerCertificate=True;";
@@ -12,7 +25,7 @@ namespace SharpDBCore.Tests
         {
             DbConnectionFactory.SetConnectionString(TestConnectionString);
             var db = DatabaseManager.Instance;
-            db.SetLogger(new NullLogger());
+            db.SetLogger(new MyLogger());
         }
         [Fact]
         public async Task ExecuteScalarAsync_ShouldReturn_1_WhenQuerySelects1()
@@ -39,10 +52,7 @@ namespace SharpDBCore.Tests
             try
             {
                 await db.ExecuteNonQueryAsync("CREATE TABLE #Temp(Id INT)");
-                await db.ExecuteNonQueryAsync("INSERT INTO #Temp(Id) VALUES (@id)", new Dictionary<string, object>
-                    {
-                        {"@id", 99}
-                    });
+                await db.ExecuteNonQueryAsync("INSERT INTO #Temp(Id) VALUES (99)");
 
                 var result = await db.ExecuteScalarAsync("SELECT COUNT(*) FROM #Temp");
 

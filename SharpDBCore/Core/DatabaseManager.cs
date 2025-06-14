@@ -32,7 +32,11 @@ namespace SharpDBCore.Core
         {
             _logger = logger ?? new NullLogger();
         }
-
+        /// <summary>
+        /// Gets the currently configured logger.
+        /// If no logger is set, a NullLogger is used by default, which logs messages to the Output window (Debug).
+        /// </summary>
+        public IDbLogger Logger => _logger;
         private void EnsureConnectionOpen()
         {
             if (_connection?.State != ConnectionState.Open)
@@ -363,6 +367,74 @@ namespace SharpDBCore.Core
             catch (Exception ex)
             {
                 _logger.LogError($"Error executing Async DataTable: {commandText}", ex);
+                throw;
+            }
+        }
+        public DataSet ExecuteDataSet(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text)
+        {
+            try
+            {
+                EnsureConnectionOpen();
+
+                using var cmd = new SqlCommand(commandText, _connection, _transaction)
+                {
+                    CommandType = commandType
+                };
+
+                if (parameters != null)
+                    SqlParameterHelper.AddParameters(cmd, parameters);
+
+                _logger.LogInfo($"Executing DataSet query: {commandText}");
+
+                using var adapter = new SqlDataAdapter(cmd);
+                var dataSet = new DataSet();
+                adapter.Fill(dataSet);
+
+                if (_transaction == null)
+                    _connection?.Close();
+
+                return dataSet;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error executing DataSet query: {commandText}", ex);
+                throw;
+            }
+        }
+
+        public async Task<DataSet> ExecuteDataSetAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await EnsureConnectionOpenAsync(cancellationToken);
+
+                await using var cmd = new SqlCommand(commandText, _connection, _transaction)
+                {
+                    CommandType = commandType
+                };
+
+                if (parameters != null)
+                    SqlParameterHelper.AddParameters(cmd, parameters);
+
+                _logger.LogInfo($"Executing Async DataSet query: {commandText}");
+
+                var dataSet = new DataSet();
+
+                // SqlDataAdapter doesn't support async natively, so wrap in Task.Run
+                await Task.Run(() =>
+                {
+                    using var adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dataSet);
+                }, cancellationToken);
+
+                if (_transaction == null)
+                    await _connection!.CloseAsync();
+
+                return dataSet;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error executing Async DataSet: {commandText}", ex);
                 throw;
             }
         }
