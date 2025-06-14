@@ -33,10 +33,19 @@ namespace SharpDBCore.Core
             _logger = logger ?? new NullLogger();
         }
         /// <summary>
-        /// Gets the currently configured logger.
-        /// If no logger is set, a NullLogger is used by default, which logs messages to the Output window (Debug).
+        /// Gets the currently configured database logger used internally by the <see cref="DatabaseManager"/>.
+        /// This logger is intended solely for logging database-related operations, such as executing commands,
+        /// managing transactions, and handling connection events.
+        ///
+        /// If no custom logger is explicitly set via <see cref="SetLogger(IDbLogger)"/>, a default <see cref="NullLogger"/> is used.
+        /// The <see cref="NullLogger"/> implementation writes minimal diagnostic information to the Output window (Debug),
+        /// but does not persist logs or perform structured logging.
+        ///
+        /// This property is not intended for general-purpose application logging. For that use case,
+        /// a separate logging mechanism should be implemented outside of the database library.
         /// </summary>
         public IDbLogger Logger => _logger;
+
         private void EnsureConnectionOpen()
         {
             if (_connection?.State != ConnectionState.Open)
