@@ -1,3 +1,4 @@
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using SharpDBCore.Core;
 using SharpDBCore.Factories;
 using SharpDBCore.Interfaces;
@@ -6,6 +7,13 @@ using System.Data.Common;
 
 namespace SharpDBCore.Tests
 {
+    public static  class DatabaseManagerExtensions
+    {
+        public static  void Test(this DatabaseManager dbManager)
+        {
+            System.Diagnostics.Debug.WriteLine($"Testing extensation method");
+        }
+    }
     public class MyLogger : NullLogger
     {
         public override void LogError(string message, Exception? ex = null)
@@ -26,6 +34,7 @@ namespace SharpDBCore.Tests
             DbConnectionFactory.SetConnectionString(TestConnectionString);
             var db = DatabaseManager.Instance;
             db.SetLogger(new MyLogger());
+            db.Logger.LogError("This is error");
         }
         [Fact]
         public async Task ExecuteScalarAsync_ShouldReturn_1_WhenQuerySelects1()
@@ -48,7 +57,8 @@ namespace SharpDBCore.Tests
             db.SetLogger(new NullLogger());
 
             db.BeginTransaction();
-
+            //extensation method test
+            db.Test();
             try
             {
                 await db.ExecuteNonQueryAsync("CREATE TABLE #Temp(Id INT)");

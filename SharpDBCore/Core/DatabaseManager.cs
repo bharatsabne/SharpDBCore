@@ -12,17 +12,13 @@ namespace SharpDBCore.Core
         private SqlConnection? _connection;
         private SqlTransaction? _transaction;
         private IDbLogger _logger;
-
         private static readonly Lazy<DatabaseManager> _instance = new(() => new DatabaseManager());
-
         public static DatabaseManager Instance => _instance.Value;
-
         private DatabaseManager()
         {
             _connection = DbConnectionFactory.CreateConnection();
             _logger = new NullLogger(); 
         }
-
         public void SetLogger(IDbLogger logger)
         {
             _logger = logger ?? new NullLogger();
@@ -40,7 +36,6 @@ namespace SharpDBCore.Core
         /// a separate logging mechanism should be implemented outside of the database library.
         /// </summary>
         public IDbLogger Logger => _logger;
-
         private void EnsureConnectionOpen()
         {
             if (_connection?.State != ConnectionState.Open)
@@ -405,7 +400,6 @@ namespace SharpDBCore.Core
                 throw;
             }
         }
-
         public async Task<DataSet> ExecuteDataSetAsync(string commandText, List<SqlParameter>? parameters = null, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
             try
