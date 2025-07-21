@@ -28,7 +28,7 @@ namespace SharpDBCore.Tests
     }
     public class DatabaseManagerTests
     {
-        private const string TestConnectionString = "Server=JITUND-0064\\SQLEXPRESS;Database=TestDb;Integrated Security=True;TrustServerCertificate=True;";
+        private const string TestConnectionString = "Server=DatabaseServer;Database=TestDb;Integrated Security=True;TrustServerCertificate=True;";
         public DatabaseManagerTests()
         {
             DbConnectionFactory.SetConnectionString(TestConnectionString);
