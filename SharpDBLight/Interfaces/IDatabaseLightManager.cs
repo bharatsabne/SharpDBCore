@@ -6,10 +6,11 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SharpDBCore.Interface;
 
 namespace SharpDBLight.Interfaces
 {
-    public interface IDatabaseManager : IDisposable, IAsyncDisposable
+    public interface IDatabaseLightManager : IDisposable, IAsyncDisposable
     {
         void SetLogger(IDbLogger logger);
 

@@ -2,7 +2,7 @@
 
 namespace SharpDBCore.Factories
 {
-    public static class DbConnectionFactory
+    public static class DbConnectionSQLFactory
     {
         private static string? _connectionString;
         public static void SetConnectionString(string connectionString)

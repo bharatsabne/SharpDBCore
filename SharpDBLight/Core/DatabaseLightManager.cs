@@ -1,7 +1,8 @@
-﻿using SharpDBLight.Factories;
+﻿using SharpDBCore.Interface;
+using SharpDBCore.Loggers;
+using SharpDBLight.Factories;
 using SharpDBLight.Healpers;
 using SharpDBLight.Interfaces;
-using SharpDBLight.Loggers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SharpDBLight.Core
 {
-    public sealed class DatabaseLightManager : IDatabaseManager
+    public sealed class DatabaseLightManager : IDatabaseLightManager
     {
         private SQLiteConnection? _connection;
         private SQLiteTransaction? _transaction;

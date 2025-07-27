@@ -1,9 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
+using SharpDBCore.Interface;
 using System.Data;
 
 namespace SharpDBCore.Interfaces
 {
-    public interface IDatabaseManager: IDisposable, IAsyncDisposable
+    public interface IDatabaseSQLManager: IDisposable, IAsyncDisposable
     {
         void SetLogger(IDbLogger logger);
         // Synchronous transaction management

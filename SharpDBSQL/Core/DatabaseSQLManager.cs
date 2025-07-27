@@ -1,22 +1,23 @@
 ﻿using Microsoft.Data.SqlClient;
 using SharpDBCore.Factories;
 using SharpDBCore.Helpers;
+using SharpDBCore.Interface;
 using SharpDBCore.Interfaces;
 using SharpDBCore.Loggers;
 using System.Data;
 
 namespace SharpDBCore.Core
 {
-    public sealed class DatabaseManager : IDatabaseManager
+    public sealed class DatabaseSQLManager : IDatabaseSQLManager
     {
         private SqlConnection? _connection;
         private SqlTransaction? _transaction;
         private IDbLogger _logger;
-        private static readonly Lazy<DatabaseManager> _instance = new(() => new DatabaseManager());
-        public static DatabaseManager Instance => _instance.Value;
-        private DatabaseManager()
+        private static readonly Lazy<DatabaseSQLManager> _instance = new(() => new DatabaseSQLManager());
+        public static DatabaseSQLManager Instance => _instance.Value;
+        private DatabaseSQLManager()
         {
-            _connection = DbConnectionFactory.CreateConnection();
+            _connection = DbConnectionSQLFactory.CreateConnection();
             _logger = new NullLogger(); 
         }
         public void SetLogger(IDbLogger logger)
@@ -24,7 +25,7 @@ namespace SharpDBCore.Core
             _logger = logger ?? new NullLogger();
         }
         /// <summary>
-        /// Gets the currently configured database logger used internally by the <see cref="DatabaseManager"/>.
+        /// Gets the currently configured database logger used internally by the <see cref="DatabaseSQLManager"/>.
         /// This logger is intended solely for logging database-related operations, such as executing commands,
         /// managing transactions, and handling connection events.
         ///
