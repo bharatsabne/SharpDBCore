@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpDBCore", "SharpDBCore\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpDBCore.Tests", "SharpDBCore.Tests\SharpDBCore.Tests.csproj", "{67344735-6BDC-4243-B208-2C2668E368FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpDBLight", "SharpDBLight\SharpDBLight.csproj", "{BB252501-8985-4037-8E06-7F99C8F7BF46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{67344735-6BDC-4243-B208-2C2668E368FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67344735-6BDC-4243-B208-2C2668E368FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67344735-6BDC-4243-B208-2C2668E368FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB252501-8985-4037-8E06-7F99C8F7BF46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB252501-8985-4037-8E06-7F99C8F7BF46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB252501-8985-4037-8E06-7F99C8F7BF46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB252501-8985-4037-8E06-7F99C8F7BF46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
