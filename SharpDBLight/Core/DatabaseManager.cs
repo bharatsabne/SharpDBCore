@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace SharpDBLight.Core
 {
-    public sealed class DatabaseManager : IDatabaseManager
+    public sealed class DatabaseLightManager : IDatabaseManager
     {
         private SQLiteConnection? _connection;
         private SQLiteTransaction? _transaction;
         private IDbLogger _logger;
-        private static readonly Lazy<DatabaseManager> _instance = new(() => new DatabaseManager());
-        public static DatabaseManager Instance => _instance.Value;
-        private DatabaseManager()
+        private static readonly Lazy<DatabaseLightManager> _instance = new(() => new DatabaseLightManager());
+        public static DatabaseLightManager Instance => _instance.Value;
+        private DatabaseLightManager()
         {
-            _connection = DbConnectionFactory.CreateConnection();
+            _connection = DbConnectionLightFactory.CreateConnection();
             _logger = new NullLogger();
         }
         public void SetLogger(IDbLogger logger)

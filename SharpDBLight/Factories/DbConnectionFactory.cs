@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SharpDBLight.Factories
 {
-    public static class DbConnectionFactory
+    public static class DbConnectionLightFactory
     {
         private static string? _connectionString;
         public static void SetConnectionString(string connectionString)

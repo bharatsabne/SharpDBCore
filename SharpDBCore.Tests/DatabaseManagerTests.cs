@@ -31,6 +31,7 @@ namespace SharpDBCore.Tests
         private const string TestConnectionString = "Server=DatabaseServer;Database=TestDb;Integrated Security=True;TrustServerCertificate=True;";
         public DatabaseManagerTests()
         {
+            //Test MS SQL Server
             DbConnectionFactory.SetConnectionString(TestConnectionString);
             var db = DatabaseManager.Instance;
             db.SetLogger(new MyLogger());
@@ -77,7 +78,6 @@ namespace SharpDBCore.Tests
                 db.RollbackTransaction();
                 throw;
             }
-
         }
     }
 }
