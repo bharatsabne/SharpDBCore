@@ -4,6 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <PackageId>SharpDBLight</PackageId>
+	  <Version>1.0.0</Version>
+	  <Authors>Bharat Sabne</Authors>
+	  <Description>A lightweight ORM layer for SQLite using SharpDBCore.</Description>
+	  <PackageTags>sqlite;orm;database;lightweight</PackageTags>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
