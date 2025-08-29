@@ -4,6 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<OutputType>Library</OutputType>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<PackageId>SharpDBCore</PackageId>
+	<!-- Change if needed -->
+	<Version>1.0.1</Version>
+	<Authors>Bharat Sabne</Authors>
+	<Description>Core functionality for SharpDBLight ORM</Description>
+	<PackageTags>sqlite;orm;database;core</PackageTags>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<RepositoryType>git</RepositoryType>
+	<RepositoryUrl>https://github.com/bharatsabne/SharpDBCore</RepositoryUrl>
   </PropertyGroup>
 
 </Project>
