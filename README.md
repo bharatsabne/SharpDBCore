@@ -135,5 +135,11 @@ catch
 }
 ```
 
+## NuGet Packages
+
+- [SharpDBCore](https://www.nuget.org/packages/SharpDBCore)  
+- [SharpDBLight](https://www.nuget.org/packages/SharpDBLight)  
+- [SharpDBSQL](https://www.nuget.org/packages/SharpDBSQL)
+
 ## ❓ Need Help?
 Open an issue or reach out if you’d like to contribute or request features!
