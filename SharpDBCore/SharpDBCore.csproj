@@ -8,7 +8,7 @@
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageId>SharpDBCore</PackageId>
 	<!-- Change if needed -->
-	<Version>1.0.1</Version>
+	<Version>1.0.2</Version>
 	<Authors>Bharat Sabne</Authors>
 	<Description>Core functionality for SharpDBLight ORM</Description>
 	<PackageTags>sqlite;orm;database;core</PackageTags>

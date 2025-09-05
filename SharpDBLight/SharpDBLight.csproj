@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	  <PackageId>SharpDBLight</PackageId>
-	  <Version>1.0.0</Version>
+	  <Version>1.0.2</Version>
 	  <Authors>Bharat Sabne</Authors>
 	  <Description>A lightweight ORM layer for SQLite using SharpDBCore.</Description>
 	  <PackageTags>sqlite;orm;database;lightweight</PackageTags>
@@ -14,11 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SharpDBCore\SharpDBCore.csproj" />
+    <PackageReference Include="SharpDBCore" Version="1.0.2" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
   </ItemGroup>
 
 </Project>
